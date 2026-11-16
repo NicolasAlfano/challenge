@@ -1,0 +1,51 @@
+{
+  "info": {
+    "name": "Challenge API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://127.0.0.1:8000" },
+    { "key": "apiKey", "value": "dev-secret-key-change-me" }
+  ],
+  "item": [
+    {
+      "name": "Health",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/health",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "v1", "health"]
+        }
+      }
+    },
+    {
+      "name": "Get rate",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "X-API-Key", "value": "{{apiKey}}" }],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/rates?base=USD&target=ARS",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "v1", "rates"],
+          "query": [
+            { "key": "base", "value": "USD" },
+            { "key": "target", "value": "ARS" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "History",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "X-API-Key", "value": "{{apiKey}}" }],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/history",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "v1", "history"]
+        }
+      }
+    }
+  ]
+}

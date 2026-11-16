@@ -1,17 +1,19 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-app = FastAPI(title="Challenge API")
+from app.api.v1.router import private_router, public_router
+from app.config import get_settings
 
-# CORS: permite que el front (puerto 5173) llame a este back (puerto 8000).
+settings = get_settings()
+
+app = FastAPI(title="Challenge API", version="1.0.0")
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=settings.cors_origins,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-
-@app.get("/api/v1/health")
-def health():
-    return {"status": "ok", "message": "Hola mundo desde FastAPI"}
+app.include_router(public_router)
+app.include_router(private_router)
