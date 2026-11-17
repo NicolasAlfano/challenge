@@ -1,14 +1,16 @@
 import secrets
-from functools import lru_cache
+from collections.abc import Iterator
 
 from fastapi import Depends, HTTPException, Security, status
 from fastapi.security import APIKeyHeader
+from sqlalchemy.orm import Session
 
 from app.application.rate_service import RateService
 from app.config import Settings, get_settings
 from app.domain.ports import QueryRepository
 from app.infrastructure.clients.static_provider import StaticRateProvider
-from app.infrastructure.db.in_memory_repository import InMemoryQueryRepository
+from app.infrastructure.db.session import get_session_factory
+from app.infrastructure.db.sqlalchemy_repository import SqlAlchemyQueryRepository
 
 api_key_header = APIKeyHeader(name="X-API-Key", auto_error=False)
 
@@ -26,9 +28,13 @@ def require_api_key(
         )
 
 
-@lru_cache
-def get_repository() -> QueryRepository:
-    return InMemoryQueryRepository()
+def get_session() -> Iterator[Session]:
+    with get_session_factory()() as session:
+        yield session
+
+
+def get_repository(session: Session = Depends(get_session)) -> QueryRepository:
+    return SqlAlchemyQueryRepository(session)
 
 
 def get_rate_service(
