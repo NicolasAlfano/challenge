@@ -1,0 +1,22 @@
+FROM python:3.12-slim AS base
+COPY --from=ghcr.io/astral-sh/uv:0.13.8 /uv /bin/uv
+WORKDIR /app
+ENV PYTHONUNBUFFERED=1 \
+    UV_LINK_MODE=copy \
+    PATH="/app/.venv/bin:$PATH"
+COPY pyproject.toml uv.lock ./
+
+# Etapa de tests: incluye dependencias de desarrollo
+FROM base AS test
+RUN uv sync --frozen --no-install-project
+COPY . .
+CMD ["pytest", "--cov=app", "--cov-report=term-missing"]
+
+# Etapa final: solo lo necesario para correr la API
+FROM base AS runtime
+RUN uv sync --frozen --no-dev --no-install-project
+COPY . .
+RUN useradd --create-home appuser
+USER appuser
+EXPOSE 8000
+CMD ["sh", "-c", "alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port 8000"]
