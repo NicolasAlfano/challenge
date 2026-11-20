@@ -6,4 +6,4 @@
 
 API de consulta de cotizaciones con FastAPI, PostgreSQL y un frontend en React.
 
-> README en construcción: en el próximo paso lo completamos.
+[![Coverage Status](https://coveralls.io/repos/github/NicolasAlfano/challenge/badge.svg?branch=main)](https://coveralls.io/github/NicolasAlfano/challenge?branch=main)
