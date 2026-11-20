@@ -48,6 +48,11 @@ jobs:
         with:
           base-path: backend
           file: backend/coverage.lcov
+      - name: Upload coverage to Coveralls
+        uses: coverallsapp/github-action@v2
+        with:
+          base-path: backend
+          file: backend/coverage.lcov
 
   frontend:
     runs-on: ubuntu-latest
