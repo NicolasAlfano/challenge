@@ -43,6 +43,11 @@ jobs:
         run: uv run alembic check
       - name: Run tests with coverage
         run: uv run pytest --cov=app --cov-report=term-missing --cov-report=lcov:coverage.lcov
+            - name: Upload coverage to Coveralls
+        uses: coverallsapp/github-action@v2
+        with:
+          base-path: backend
+          file: backend/coverage.lcov
 
   frontend:
     runs-on: ubuntu-latest

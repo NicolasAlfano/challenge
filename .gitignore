@@ -14,3 +14,5 @@ dist/
 # Entorno y sistema
 .env
 .DS_Store
+
+echo "coverage.lcov" >> .gitignore
